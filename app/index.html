@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+    <link rel="stylesheet" href="elements/elements.css">
+    <link rel="stylesheet" href="css/main.css">
+    
+</head>
+<body>
+    <div id="header"></div>
+    <div id="notification-wrap"></div>
+    <div id="main">
+        <div data-hue="200" id="menu" class="current view">
+            <div class="subviews">
+                <div>
+                    <canvas id="canvas1"></canvas>
+                </div>
+                <div>
+                    <div class="controls" data-bindTo="canvas1">
+                        <input name="x" type="number" placeholder="x">
+                        <input name="y" type="number" placeholder="y">
+                        <input name="z" type="number" placeholder="z">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="view">
+            test
+        </div>
+    </div>
+<script src="elements/elements.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
