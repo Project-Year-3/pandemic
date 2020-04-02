@@ -223,7 +223,9 @@ renderSubview = (parent)=>{
         indicator.querySelector("div.current").classList.remove("current");
         subviews[i].classList.add("current");
         indicator.children[i].classList.add("current");
-      parent.dispatchEvent(subviewChange);
+      parent.dispatchEvent(new CustomEvent('subviewChange', {bubbles:true, detail: {
+        page: i
+      }}));
     }
     
     indicator.addEventListener("click",function(e){

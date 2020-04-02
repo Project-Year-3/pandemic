@@ -34,7 +34,7 @@
     overflow: auto;
     row-gap: 2vh;
     place-items: center;
-    max-height:calc(var(--height) * 0.7)
+    max-height:calc(var(--height) * 0.7);
 }
 .controls::before {
     content:"controls";

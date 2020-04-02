@@ -170,7 +170,7 @@ hr {
   display: grid;
 }
 
-input {
+/* input {
   width:90%;
   height:7vh;
   text-align: center;
@@ -190,7 +190,7 @@ input::placeholder {
 
 input:focus, input.selected {
   opacity: 1;
-}
+} */
 
 .button-wrap {
   display: grid;
