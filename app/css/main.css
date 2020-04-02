@@ -12,20 +12,20 @@
 
 #main, #header {
     width:var(--width);
+    margin:0 auto;
 }
 
 .view {
     width:calc(var(--width));
 }
-
-.subviews > .view-wrap {
-    min-width:calc(var(--width) * 0.9);
+.subviews {
+    padding:0;
 }
-
-canvas {
-    background:black;
+.subviews > .view-wrap {
     width:var(--width);
-    height:var(--width);
+    min-width:var(--width);
+    min-height:79vh;
+    height:79vh;
 }
 
 .controls {
@@ -64,4 +64,15 @@ input[type="radio"]::after{
     line-height: 5vh;
     text-align: center;
     font-size: medium;
+}
+
+.canvas-wrapper {
+    width:min(var(--width),calc(var(--height)*0.8));
+    height:min(var(--width),calc(var(--height)*0.8));
+    background-color: hsla(0, 0%, 80%, 0.39);
+}
+
+.canvas-wrapper > canvas {
+    width:min(var(--width),var(--height));
+    height:min(var(--width),var(--height));
 }
