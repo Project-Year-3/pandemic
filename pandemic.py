@@ -60,7 +60,7 @@ while len(infected) > 0:
     # Now iterate through uninfected list, and for each item use the chance function to assses if the item
     # should be moved to the infected list
 
-    prob_infection = infection_constant * (infected_today/(uninfected_today+infected_today))
+    prob_infection = infection_constant * math.sin(((math.pi)/2)*(infected_today/(uninfected_today+infected_today)))
     uninfected_new = []
     for i in range(uninfected_today):
         if chance(prob_infection) == True:
