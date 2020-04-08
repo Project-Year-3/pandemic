@@ -120,6 +120,7 @@ plt.plot(uninfected_plot, 'y')
 plt.plot(infected_plot, 'r' )
 plt.plot(recovered_plot, 'g')
 plt.plot(died_plot, 'b')
+plt.xlim(0,120)
 plt.show()
 
 
