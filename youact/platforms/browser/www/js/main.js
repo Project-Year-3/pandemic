@@ -1,48 +1,136 @@
 var init = function(){
-  mnml = new MNML();
-
-  chart = new Canvas("chart",{
-    title:{
-      text:"hello world"
-    },
-    type:"column",
-    data: [              
-      {
-        // Change type to "doughnut", "line", "splineArea", etc.
-        type: "column",
-        dataPoints: [
-          { label: "apple",  y: 10  },
-          { label: "orange", y: 15  },
-          { label: "banana", y: 25  },
-          { label: "mango",  y: 30  },
-          { label: "grape",  y: 28  }
-        ]
-      }
-      ],
-      animationEnabled: true
+  pandemicsCourse = new Course({
+    name:"Pandemics",
+    htmlUrl:"/pandemics_course/pandemics.html",
+    jsonUrl:"/pandemics_course/content.json"
   });
-  chart.render();
-  mnml.e.controls.controls.wrapper.addEventListener("mnmlChange",e=>{
-    var name = e.detail.name;
-    var value = e.detail.value;
-    var points = chart.chart.data[0].dataPoints;
-    for(var i in points){
-      if(points[i].label == name){
-        points[i].y = Number(value);
+  pandemicsCourse.loaded.then(()=>{
+    for (key in pandemicsCourse.content) {
+      if(pandemicsCourse.content[key].type == "quiz"){
+        pandemicsCourse.populateQuiz(key)
       }
-    };
-    chart.render();
-  },false);
+    }
+    pandemicsCourse.cloneElements(document.body);
+  });
 
-  chart.chart.data[0].dataPoints.forEach(e => {
-    mnml.addControl("controls",{
-      label:e.label,
-      name:e.label,
+  function setupPandemics(){
+    mnml.addControl("pandemicSim",{
+      label:"Infection Constant",
+      name:"infection_constant",
       type:"range",
-      value:e.y,
+      value:0.8,
       min:0,
-      max:100
+      max:1,
+      step:0.1
     })
-  });
+    mnml.addControl("pandemicSim",{
+      label:"Probability of Recovery",
+      name:"prob_of_recovery",
+      type:"range",
+      value:0.9,
+      min:0,
+      max:1,
+      step:0.1
+    })
+    mnml.addControl("pandemicSim",{
+      label:"Closing Time",
+      name:"closing_time",
+      type:"range",
+      value:14,
+      min:5,
+      max:250,
+      step:1
+    });
+
+    document.querySelector("#pandemicSim").addEventListener("mnmlChange",(e)=>{
+      pModel.config[e.detail.name] = e.detail.value;
+    },false);
+
+    pModel.initialise();
+  }
+  
+  sleepCourse = new Course({
+    name:"Sleep-Health",
+    htmlUrl:"/sleephealth_course/sleephealth.html",
+    jsonUrl:"/sleephealth_course/sleephealth.json"
+  })
+
+  sleepCourse.loaded.then(()=>{
+    sleepCourse.cloneElements(document.body);
+  })
+
+  function setupSleep(){
+    var quiz = document.querySelector("#sleepQuiz");
+    var alreadySelected = false;
+    quiz.addEventListener("click",(e)=>{
+      if(e.target != e.currentTarget.children && !alreadySelected){
+        e.target.classList.add("selected");
+        alreadySelected = true;
+      }
+    },false);
+
+    let wordCanvas = document.querySelector("#wordCanvas");
+    wordCanvas.width = window.innerWidth;
+    wordCanvas.height = window.innerHeight;
+    let wc = wordCanvas.getContext("2d");
+    wc.font = "20px Arial";
+    let anim = null;
+    let words = [];
+    let hasStarted = false;
+    mnml.addControl("wordControls",{
+      label:"word",
+      name:"words",
+      value:"sleep",
+      type:"text"
+    })
+    document.querySelector("#wordControls").addEventListener("mnmlChange",(e)=>{
+      let x = Math.random() * wordCanvas.width;
+      let y = Math.random() * wordCanvas.height;
+      let a = Math.random() * Math.PI * 2;
+      words.push({text:e.detail.value,x:x,y:y,a:a});
+      mnml.e.controls.wordControls.elements.words.value = "";
+      if(!hasStarted){
+        hasStarted = true;
+        renderWords();
+      }
+    },false);
+    function renderWords(){
+      wc.beginPath();
+      wc.clearRect(0,0,wordCanvas.width,wordCanvas.height);
+      let v = 1;
+      
+      words.forEach(w=>{
+        let d = wc.measureText(w.text);
+        if(w.x < 0 || w.x > wordCanvas.width - d.width){
+          w.a += Math.PI/2;
+        }
+        if(w.y < 0 || w.y > wordCanvas.height - d.height){
+          w.a += Math.PI/2;
+        }
+        w.x += v * Math.cos(w.a);
+        w.y += v * Math.sin(w.a);
+        /* if(w.x > wordCanvas.width + d.width){
+          w.x = -d.width;
+        }
+        if(w.x < -d.width){
+          w.x = wordCanvas.width + d.width;
+        }
+        if(w.y < -d.height){
+          w.y = wordCanvas.height + d.height;
+        }
+        if(w.y > wordCanvas.height + d.height){
+          w.y = -d.height;
+        } */
+        wc.fillText(w.text,w.x,w.y);
+      });
+      anim = requestAnimationFrame(renderWords);
+    }
+  }
+
+  Promise.all([sleepCourse.loaded,pandemicsCourse.loaded]).then(()=>{
+    mnml = new MNML();
+    setupPandemics();
+    setupSleep();
+  })
   
 }

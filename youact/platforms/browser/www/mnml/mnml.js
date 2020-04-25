@@ -102,14 +102,14 @@ class MNML {
     this.setupControls();
   }
 
-  addControl(id,{label,name,type="number",value=50,min=0,max=100}) {
+  addControl(id,{label,name,type="number",value=50,min=0,max=100,step=1}) {
     var wrapper = document.createElement("div");
     var info = document.createElement("div");
     var labelElem = document.createElement("label");
     labelElem.innerHTML=label;
     var input = document.createElement("input");
     input.name = name; input.type = type;
-    input.value = value; input.min = min; input.max = max;
+    input.value = value; input.min = min; input.max = max; input.step = step;
     var output = document.createElement("output");
     output.innerHTML = value;
     info.appendChild(labelElem);

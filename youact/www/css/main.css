@@ -33,3 +33,61 @@ input[type="radio"]::after{
     width:min(var(--width),var(--height));
     height:min(var(--width),var(--height));
 }
+
+#mnml .subview-wrap > .subview {
+    place-items: start;
+    place-content: start;
+    width: calc(var(--width) * 0.98)
+}
+
+#mnml .subview-wrap.quiz > .subview {
+    display: none;
+  }
+#mnml .subview-wrap.quiz > .subview.current {
+    display: grid;
+  }
+
+#mnml .subview-wrap {
+    height:var(--height);
+    overflow-y: hidden;
+}
+#mnml .subview-wrap > .subview {
+
+    overflow-y: auto;
+}
+
+/* sleephealth */
+.options {
+    display: grid;
+    grid-template: 2/2;
+    width: calc(var(--width) * 0.9);
+    height: calc(var(--width) * 0.9);
+    gap: 1vw;
+    grid-template: ". ." ". .";
+}
+
+.options > div {
+    background: #ccc;
+    display: grid;
+    place-content: center;
+}
+.options > div.correct.selected {
+    background: green;
+}
+
+.options > div.selected {
+    background: red;
+}
+
+.view#sleephealth > .subview-wrap {
+    z-index: 1;
+}
+
+#mnml #wordCanvas{
+    width:auto;
+    height: auto;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 0;
+}

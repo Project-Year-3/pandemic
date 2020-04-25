@@ -43,29 +43,34 @@
                 <button id="navToggle"></button>
             </header>
             <nav>
-                <div data-view="v0">HOME</div>
-                <div data-view="v1">SETTINGS</div>
+                <div data-view="pandemics">Pandemics</div>
+                <div data-view="sleephealth">Sleep-Health</div>
             </nav>
             <main>
                 <div class="current view" id="v0">
                     <div class="subview-wrap">
                         <div class="subview">
-                            <div class="canvas-wrapper" id="chart"></div>
-                        </div>
-                        <div class="subview">
-                            <div class="controls" data-label="chart" id="controls"></div>
+                            <!-- content goes here -->
                         </div>
                     </div>
                 </div>
                 <div class="view" id="v1">
                     <div>put something here</div>
                 </div>
+
+                <div class="view" id="pandemics"></div>
+                <div class="view" id="pandemics-quiz1"></div>
+                <div class="view" id="pandemics2"></div>
+
+                <div class="view" id="sleephealth"></div>
             </main>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/canvasjs.min.js"></script>
         <script type="text/javascript" src="js/canvas.js"></script>
+        <script type="text/javascript" src="js/course.js"></script>
         <script type="text/javascript" src="mnml/mnml.js"></script>
+        <script type="text/javascript" src="pandemics_course/model.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
