@@ -36,5 +36,5 @@ var app = {
     }
 };
 
-app.initialize();
-//window.onload = init;
+//app.initialize();
+window.onload = init;

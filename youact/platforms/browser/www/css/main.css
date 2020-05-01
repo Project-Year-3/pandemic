@@ -91,3 +91,7 @@ input[type="radio"]::after{
     left:0;
     z-index: 0;
 }
+
+#mnml img {
+    width: calc(var(--width) * 0.97);
+}

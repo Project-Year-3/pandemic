@@ -25,7 +25,7 @@ var init = function(){
     })
     mnml.addControl("pandemicSim",{
       label:"Probability of Recovery",
-      name:"prob_of_recovery",
+      name:"recovery_constant",
       type:"range",
       value:0.9,
       min:0,
@@ -43,7 +43,8 @@ var init = function(){
     });
 
     document.querySelector("#pandemicSim").addEventListener("mnmlChange",(e)=>{
-      pModel.config[e.detail.name] = e.detail.value;
+      console.log(e.detail)
+      pModel.config[e.detail.name] = Number(e.detail.value);
     },false);
 
     pModel.initialise();
@@ -86,14 +87,32 @@ var init = function(){
     document.querySelector("#wordControls").addEventListener("mnmlChange",(e)=>{
       let x = Math.random() * wordCanvas.width;
       let y = Math.random() * wordCanvas.height;
+      x = wordCanvas.width/2;
+      y = wordCanvas.height/2;
+      h = Math.floor(Math.random() * 360);
       let a = Math.random() * Math.PI * 2;
-      words.push({text:e.detail.value,x:x,y:y,a:a});
+      let inSet = sleepCourse.content["sleepWords"].includes(e.detail.value.toLowerCase());
+      words.push({
+        text:e.detail.value,
+        x:x,
+        y:y,
+        a:a,
+        h:h,
+        inSet:inSet
+      });
+
       mnml.e.controls.wordControls.elements.words.value = "";
       if(!hasStarted){
         hasStarted = true;
         renderWords();
       }
     },false);
+
+    function angleReflect(incidenceAngle, surfaceAngle){
+      var a = surfaceAngle * 2 - incidenceAngle;
+      return a >= Math.PI*2 ? a - Math.PI*2 : a < 0 ? a + Math.PI*2 : a;
+    }
+
     function renderWords(){
       wc.beginPath();
       wc.clearRect(0,0,wordCanvas.width,wordCanvas.height);
@@ -101,26 +120,30 @@ var init = function(){
       
       words.forEach(w=>{
         let d = wc.measureText(w.text);
-        if(w.x < 0 || w.x > wordCanvas.width - d.width){
-          w.a += Math.PI/2;
+        let r = d.width/2;//width of word
+        let x = w.x + r;
+        let y = w.y - 5;
+        if(w.x < 0 || w.x > wordCanvas.width - r){
+          w.a = angleReflect(w.a,Math.PI/2);
         }
-        if(w.y < 0 || w.y > wordCanvas.height - d.height){
-          w.a += Math.PI/2;
+        if(w.y < 0 || w.y > wordCanvas.height - r){
+          w.a = angleReflect(w.a,0);
         }
         w.x += v * Math.cos(w.a);
         w.y += v * Math.sin(w.a);
-        /* if(w.x > wordCanvas.width + d.width){
-          w.x = -d.width;
+        
+        wc.beginPath();
+        wc.arc(x,y,r,0,Math.PI*2);
+        wc.strokeStyle = `hsl(${w.h},50%,50%)`;
+        wc.stroke();
+        if(revWords && w.inSet){
+          wc.fillStyle = `hsl(${w.h},50%,50%)`;
+          wc.fill();
+          wc.fillStyle = "#fff"
+        } else {
+          wc.fillStyle = "#000"
         }
-        if(w.x < -d.width){
-          w.x = wordCanvas.width + d.width;
-        }
-        if(w.y < -d.height){
-          w.y = wordCanvas.height + d.height;
-        }
-        if(w.y > wordCanvas.height + d.height){
-          w.y = -d.height;
-        } */
+        
         wc.fillText(w.text,w.x,w.y);
       });
       anim = requestAnimationFrame(renderWords);
@@ -131,6 +154,16 @@ var init = function(){
     mnml = new MNML();
     setupPandemics();
     setupSleep();
+    mnml.e.mnml.addEventListener("viewChange",e=>{
+      if(e.detail == "pandemics2"){
+        pModel.chart.render();
+      }
+    },false)
   })
   
+}
+
+var revWords = false;
+function revealWords(c){
+  revWords = c.checked;
 }

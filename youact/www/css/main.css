@@ -1,3 +1,6 @@
+:root {
+    font-size: 16px;
+}
 
 input[type="number"] {
     height:8vh;
@@ -90,4 +93,25 @@ input[type="radio"]::after{
     top:0;
     left:0;
     z-index: 0;
+}
+
+#mnml img {
+    width: calc(var(--width) * 0.94);
+}
+
+.subview button, .subview select {
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px black;
+    margin: 0 auto;
+    margin-top:2vh;
+    display: grid;
+    font-size: 1.1rem;
+    padding: 1vw 1vh;
+    background: #eee;
+}
+
+.quiz > .subview {
+    place-items: center !important;
+    place-content: center !important;
 }
