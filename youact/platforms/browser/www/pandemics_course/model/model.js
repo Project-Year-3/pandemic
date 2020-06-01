@@ -141,7 +141,6 @@ pModel.frame = function(){
 
 }
 
-window.onload = pModel.initialise();
 
 
 

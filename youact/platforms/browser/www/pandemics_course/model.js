@@ -22,7 +22,6 @@ pModel.current = {
   recovered:0,
   dead:0
 }
-
 pModel.data = {
   uninfected:[],
   infected:[],
@@ -30,7 +29,25 @@ pModel.data = {
   dead:[]
 }
 
+pModel.reset = function(){
+  xVal = 0;
+  for(var key in pModel.data){
+    pModel.data[key].length = 0;
+  }
+  pModel.current.uninfected=pModel.config.population_size - pModel.config.initial_infections;
+  pModel.current.infected=pModel.config.initial_infections;
+  pModel.current.recovered=0;
+  pModel.current.dead=0;
+}
+
+pModel.reset();
+
 pModel.initialise = function(){
+  document.querySelector("#renderCanvas").addEventListener("click",(e)=>{
+    pModel.reset();
+    pModel.updateChart();
+  },false);
+  
   pModel.chart = new Canvas("pModelChart", {
     title :{
       text: "Pandemics Model"
@@ -71,7 +88,7 @@ pModel.initialise = function(){
   });
 var updateInterval = 1000;
 
-var xVal = 0;
+
 pModel.updateChart = function () {
   let newly_infected = 0;
   for(let i=0; i<pModel.current.infected; i++){
@@ -120,7 +137,7 @@ pModel.updateChart = function () {
   xVal += 1;
   pModel.chart.render();
   let unended = pModel.current.uninfected + pModel.current.infected;
-  if(xVal < 50 && unended > 20){
+  if(xVal < 100 && unended > 20){
     anim = requestAnimationFrame(pModel.updateChart);
   }
 };
@@ -140,8 +157,3 @@ pModel.chart.render();
 pModel.frame = function(){
 
 }
-
-window.onload = pModel.initialise();
-
-
-
